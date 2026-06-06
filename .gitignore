@@ -4,6 +4,9 @@ discovery-*.txt
 # User data — saved armor loadouts, created at runtime in the mod folder
 loadouts.txt
 
+# Internal dev/knowledge-transfer doc (has machine paths + working notes; keep local)
+HANDOFF.md
+
 # Logs / editor cruft
 *.log
 *.tmp
