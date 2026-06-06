@@ -1,0 +1,2 @@
+The presence of this file enables the mod when it sits in ue4ss\Mods\SyloreQuickSwap\.
+(Alternative to adding "SyloreQuickSwap : 1" in ue4ss\Mods\mods.txt — either works.)

@@ -1,0 +1,11 @@
+# Diagnostic dumps from discovery.lua (regenerated locally; not part of the mod)
+discovery-*.txt
+
+# User data — saved armor loadouts, created at runtime in the mod folder
+loadouts.txt
+
+# Logs / editor cruft
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
