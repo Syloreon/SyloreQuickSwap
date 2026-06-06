@@ -91,3 +91,7 @@ SyloreQuickSwap/
   `config.DiscoveryMode = true` and use `scripts/discovery.lua` to re-probe; see `NAMES.md`).
 - `F1`–`F4` are used for loadouts; if a future game patch binds them, remap `LoadoutApplyKeys`
   in `config.lua`.
+
+## License
+
+[MIT](LICENSE) © Syloreon Khan
