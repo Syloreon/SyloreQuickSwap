@@ -58,3 +58,12 @@ if config.DiscoveryMode then
     RegisterKeyBind(config.CombatMagicKey,{}, safe(function() RQS.dumpPlayer() end))
     RegisterKeyBind(config.HookKey,       {}, safe(function() RQS.armRuneHooks() end))
 end
+
+-- ── HUD color-dot gate (only when config.HudGateMode; TEMPORARY) ────────────
+if config.HudGateMode and not config.DiscoveryMode then
+    local hudgate = require("hudgate")
+    print("[Sylore Quick Swap] HUD GATE on — F7=G1 create dot, F8=G2 position, F9=G3 recreate. SAVE FIRST.")
+    bind("hudgate G1", config.HudGateG1Key, {}, function() hudgate.g1() end)
+    bind("hudgate G2", config.HudGateG2Key, {}, function() hudgate.g2() end)
+    bind("hudgate G3", config.HudGateG3Key, {}, function() hudgate.g3() end)
+end
