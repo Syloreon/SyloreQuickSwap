@@ -62,7 +62,7 @@ config.HookKey              = Key.F7   -- arm rune hooks (trace)
 -- ── HUD color-dot gate (TEMPORARY — one-attempt probe, see plans/2026-07-03) ──
 -- When true, main.lua loads hudgate.lua and binds F7/F8/F9 to gates G1/G2/G3.
 -- MUTUALLY EXCLUSIVE with DiscoveryMode (same keys). Leave OFF for normal play.
-config.HudGateMode          = false
+config.HudGateMode          = true   -- ARMED for the one-attempt gate session (disarm after Task 2)
 config.HudGateG1Key         = Key.F7   -- G1: create own widget (red)
 config.HudGateG2Key         = Key.F8   -- G2: size + position it
 config.HudGateG3Key         = Key.F9   -- G3: remove + recreate (blue)

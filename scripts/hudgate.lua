@@ -134,9 +134,11 @@ function hudgate.g3()
             state.widget, state.image = nil, nil
             state.widget, state.image = createDot(0.1, 0.3, 1.0)
             if valid(state.widget) then
-                flog("G3: DANGEROUS - re-apply G2 sizing to recreated widget")
+                flog("G3: DANGEROUS - SetDesiredSizeInViewport on recreated widget")
                 state.widget:SetDesiredSizeInViewport({ X = 16.0, Y = 16.0 })
+                flog("G3: DANGEROUS - SetAlignmentInViewport on recreated widget")
                 state.widget:SetAlignmentInViewport({ X = 0.5, Y = 0.5 })
+                flog("G3: DANGEROUS - SetPositionInViewport on recreated widget")
                 state.widget:SetPositionInViewport({ X = 960.0, Y = 590.0 }, false)
                 flog("G3: SURVIVED - dot should now be BLUE. ALL GATES PASS.")
             end
