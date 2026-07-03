@@ -86,22 +86,26 @@ local function createDot(col)
     return w
 end
 
--- Public: show/replace the dot for this ammo asset. Best-effort: any failure
--- logs (if Verbose) and leaves the game untouched — never blocks the swap.
-function hud.setDot(assetName)
+-- Public: replace the dot NOW — caller must ALREADY be on the game thread
+-- (swap's load closure calls this). Best-effort: fully pcall'd, never throws.
+function hud.applyDot(assetName)
     if not config.ShowColorDot then return end
     local okCol, col = pcall(colorFor, assetName)
     if not okCol or col == nil then col = config.ColorDefault end
-    ExecuteInGameThread(function()
-        local ok, err = pcall(function()
-            if valid(state.widget) then
-                state.widget:RemoveFromParent()   -- G3-proven on OWN widgets
-            end
-            state.widget = nil
-            state.widget = createDot(col)
-        end)
-        if not ok then log("setDot failed: " .. tostring(err)) end
+    local ok, err = pcall(function()
+        if valid(state.widget) then
+            state.widget:RemoveFromParent()   -- G3-proven on OWN widgets
+        end
+        state.widget = nil
+        state.widget = createDot(col)
     end)
+    if not ok then log("applyDot failed: " .. tostring(err)) end
+end
+
+-- Public: same, but safe from any thread (queues onto the game thread).
+function hud.setDot(assetName)
+    if not config.ShowColorDot then return end
+    ExecuteInGameThread(function() hud.applyDot(assetName) end)
 end
 
 return hud

@@ -266,7 +266,26 @@ function swap.cycle(direction)
     end
     if nextIdx == cur then return end
 
-    local target = ammo[nextIdx]
+    -- Candidates in cycle order starting at nextIdx: the game can REFUSE a
+    -- load (e.g. level-gated runes), so V hops onward until one sticks — at
+    -- most once around, never landing back on the current ammo.
+    local tries = {}
+    do
+        local idx, steps = nextIdx, 0
+        while steps < #ammo and idx ~= cur do
+            tries[#tries + 1] = ammo[idx]
+            idx = idx + direction
+            if idx > #ammo then
+                if not config.WrapAround then break end
+                idx = 1
+            elseif idx < 1 then
+                if not config.WrapAround then break end
+                idx = #ammo
+            end
+            steps = steps + 1
+        end
+    end
+    if #tries == 0 then return end
 
     local invCtrl = findComponent(pc, "InventoryController")
     if not valid(invCtrl) then
@@ -274,24 +293,34 @@ function swap.cycle(direction)
         return
     end
 
-    -- The load is a game-object mutation: run it on the game thread.
+    -- ONE game-thread closure: attempt candidates in order, verifying each by
+    -- re-reading the loadout slot (it re-points synchronously on accept; a
+    -- refused load leaves it untouched). Feedback and the color dot use the
+    -- VERIFIED result — never the attempt (a lying dot is worse than none).
     ExecuteInGameThread(function()
         local ok, err = pcall(function()
-            invCtrl:UseItemFromInventory(target.inv, target.slot)
+            local landed = nil
+            for _, cand in ipairs(tries) do
+                invCtrl:UseItemFromInventory(cand.inv, cand.slot)
+                local now = itemInLoadoutSlot(loadout, strat.slot)
+                local nowAsset = now and assetOf(now) or nil
+                if nowAsset == cand.asset then landed = cand.asset; break end
+            end
+            if landed then
+                if config.ShowOnScreenFeedback then
+                    swap.onScreen(strat.label .. ": " .. pretty(landed))
+                end
+            else
+                log(strat.label .. ": no other loadable option (kept "
+                    .. pretty(currentAsset) .. ").")
+            end
+            local shown = landed or currentAsset
+            if shown then hud.applyDot(shown) end   -- already on the game thread
         end)
         if not ok then
             print("[Sylore Quick Swap] load failed: " .. tostring(err))
         end
     end)
-
-    -- Color-dot feedback (own-widget HUD; best-effort, never blocks the swap).
-    hud.setDot(target.asset)
-
-    log(strat.label .. ": " .. pretty(currentAsset) .. " -> " .. pretty(target.asset)
-        .. " (slot " .. target.slot .. ")")
-    if config.ShowOnScreenFeedback then
-        swap.onScreen(strat.label .. ": " .. pretty(target.asset))
-    end
 end
 
 -- Best-effort feedback. UE4SS has no universal toast, so we log; a HUD hook can go here.
