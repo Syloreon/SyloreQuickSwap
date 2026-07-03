@@ -91,4 +91,13 @@ config.ColorDefault         = { R = 1.0, G = 1.0, B = 1.0 }  -- unmapped ammo
 config.DotSize              = 16.0     -- square edge, px
 config.DotOffsetY           = 50.0     -- px below screen center (reticle area)
 
+-- ── Icon-overlay gate (TEMPORARY — v2 one-shot probe, see plans/2026-07-03-ammo-icon-overlay) ──
+-- F7 = read-only ItemData icon scan (repeatable); F8 = G4 one-shot brush probe.
+-- Set IconGateProp to the icon property name found in sqs-icongate.txt before F8.
+-- MUTUALLY EXCLUSIVE with HudGateMode and DiscoveryMode. Leave OFF for normal play.
+config.IconGateMode         = false
+config.IconGateScanKey      = Key.F7
+config.IconGateG4Key        = Key.F8
+config.IconGateProp         = ""
+
 return config

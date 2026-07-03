@@ -67,3 +67,11 @@ if config.HudGateMode and not config.DiscoveryMode then
     bind("hudgate G2", config.HudGateG2Key, {}, function() hudgate.g2() end)
     bind("hudgate G3", config.HudGateG3Key, {}, function() hudgate.g3() end)
 end
+
+-- ── Icon-overlay gate (only when config.IconGateMode; TEMPORARY) ────────────
+if config.IconGateMode and not config.HudGateMode and not config.DiscoveryMode then
+    local icongate = require("icongate")
+    print("[Sylore Quick Swap] ICON GATE on — F7=scan ItemData icons (read-only), F8=G4 one-shot brush probe. SAVE FIRST before F8.")
+    bind("icongate scan", config.IconGateScanKey, {}, function() icongate.scan() end)
+    bind("icongate G4",   config.IconGateG4Key,   {}, function() icongate.g4() end)
+end
