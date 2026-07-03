@@ -95,7 +95,7 @@ config.DotOffsetY           = 50.0     -- px below screen center (reticle area)
 -- F7 = read-only ItemData icon scan (repeatable); F8 = G4 one-shot brush probe.
 -- Set IconGateProp to the icon property name found in sqs-icongate.txt before F8.
 -- MUTUALLY EXCLUSIVE with HudGateMode and DiscoveryMode. Leave OFF for normal play.
-config.IconGateMode         = false
+config.IconGateMode         = true   -- ARMED for the v2 gate session (disarm after Task I2)
 config.IconGateScanKey      = Key.F7
 config.IconGateG4Key        = Key.F8
 config.IconGateProp         = ""
