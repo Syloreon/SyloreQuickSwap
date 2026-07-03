@@ -315,7 +315,16 @@ function swap.cycle(direction)
                     .. pretty(currentAsset) .. ").")
             end
             local shown = landed or currentAsset
-            if shown then hud.applyDot(shown) end   -- already on the game thread
+            if shown then
+                -- Icon from the VERIFIED slot item (nil -> hud falls back to the square).
+                local iconTex = nil
+                pcall(function()
+                    local slotItem = itemInLoadoutSlot(loadout, strat.slot)
+                    local d = itemData(slotItem)
+                    if d ~= nil then iconTex = d.AmmoCounterIcon end
+                end)
+                hud.applyDot(shown, iconTex)   -- already on the game thread
+            end
         end)
         if not ok then
             print("[Sylore Quick Swap] load failed: " .. tostring(err))

@@ -6,8 +6,8 @@
     plan). Native game widgets are never touched — that path hard-crashes.
 
     Public surface:
-      hud.applyDot(assetName) — replace the dot NOW; caller MUST already be on the game thread (this is what swap.lua calls from inside its load closure).
-      hud.setDot(assetName)   — same, safe from any thread (queues onto the game thread).
+      hud.applyDot(assetName, iconTex) — replace the dot NOW; caller MUST already be on the game thread (this is what swap.lua calls from inside its load closure). iconTex is optional (a live Texture2D, e.g. ItemData.AmmoCounterIcon); nil (or config.ShowIconOverlay=false) falls back to the plain color square.
+      hud.setDot(assetName)   — same, safe from any thread (queues onto the game thread); no icon (used by nothing today).
     Both are best-effort and never throw.
 
     Author: Syloreon Khan <sylore@hotmail.com>
@@ -65,7 +65,10 @@ end
 
 -- The G1-proven creation path: UserWidget shell + UImage root, tinted
 -- pre-viewport, then sized/positioned (G2-proven) after AddToViewport.
-local function createDot(col)
+-- tex is optional (a live Texture2D); when readable it's applied via the
+-- G4-proven op (img.Brush.ResourceObject = tex, on OUR OWN image, pre-viewport)
+-- and the widget is sized as an icon instead of a square.
+local function createDot(col, tex)
     local pc = UEHelpers:GetPlayerController()
     if not valid(pc) then return nil end
     local widgetClass = StaticFindObject("/Script/UMG.UserWidget")
@@ -78,11 +81,18 @@ local function createDot(col)
     local img = StaticConstructObject(imageClass, w.WidgetTree, FName("SQSDotImage"))
     if not valid(img) then return nil end
     w.WidgetTree.RootWidget = img
+
+    local usedIcon = false
+    if tex ~= nil and valid(tex) then
+        img.Brush.ResourceObject = tex   -- G4-proven on OWN image, pre-viewport
+        usedIcon = true
+    end
+
     setColorFields(img, col)
     w:AddToViewport(100)
     state.widget = w   -- track the instant it's on the viewport, so a later throw can't orphan it
 
-    local size = config.DotSize or 16.0
+    local size = usedIcon and (config.IconSize or 32.0) or (config.DotSize or 16.0)
     local px, py = dotPosition(pc)
     w:SetDesiredSizeInViewport({ X = size, Y = size })
     w:SetAlignmentInViewport({ X = 0.5, Y = 0.5 })
@@ -92,8 +102,11 @@ end
 
 -- Public: replace the dot NOW — caller must ALREADY be on the game thread
 -- (swap's load closure calls this). Best-effort: fully pcall'd, never throws.
-function hud.applyDot(assetName)
+-- iconTex is optional (nil -> plain color square, forwarded only when
+-- config.ShowIconOverlay is true).
+function hud.applyDot(assetName, iconTex)
     if not config.ShowColorDot then return end
+    if not config.ShowIconOverlay then iconTex = nil end
     local okCol, col = pcall(colorFor, assetName)
     if not okCol or col == nil then col = config.ColorDefault end
     local ok, err = pcall(function()
@@ -101,15 +114,16 @@ function hud.applyDot(assetName)
             state.widget:RemoveFromParent()   -- G3-proven on OWN widgets
         end
         state.widget = nil
-        state.widget = createDot(col)
+        state.widget = createDot(col, iconTex)
     end)
     if not ok then log("applyDot failed: " .. tostring(err)) end
 end
 
 -- Public: same, but safe from any thread (queues onto the game thread).
+-- No icon — used by nothing today; stays a thread-safe wrapper.
 function hud.setDot(assetName)
     if not config.ShowColorDot then return end
-    ExecuteInGameThread(function() hud.applyDot(assetName) end)
+    ExecuteInGameThread(function() hud.applyDot(assetName, nil) end)
 end
 
 return hud

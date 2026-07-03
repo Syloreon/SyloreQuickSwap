@@ -91,11 +91,17 @@ config.ColorDefault         = { R = 1.0, G = 1.0, B = 1.0 }  -- unmapped ammo
 config.DotSize              = 16.0     -- square edge, px
 config.DotOffsetY           = 50.0     -- px below screen center (reticle area)
 
+-- Icon overlay (v2): draw the ammo's own icon (AmmoCounterIcon texture),
+-- tinted with its ColorMap color, instead of a plain square. Falls back to
+-- the square automatically whenever the texture can't be read.
+config.ShowIconOverlay      = true
+config.IconSize             = 32.0    -- icon edge, px (square uses DotSize)
+
 -- ── Icon-overlay gate (TEMPORARY — v2 one-shot probe, see plans/2026-07-03-ammo-icon-overlay) ──
 -- F7 = read-only ItemData icon scan (repeatable); F8 = G4 one-shot brush probe.
 -- Set IconGateProp to the icon property name found in sqs-icongate.txt before F8.
 -- MUTUALLY EXCLUSIVE with HudGateMode and DiscoveryMode. Leave OFF for normal play.
-config.IconGateMode         = true   -- ARMED for the v2 gate session (disarm after Task I2)
+config.IconGateMode         = false
 config.IconGateScanKey      = Key.F7
 config.IconGateG4Key        = Key.F8
 config.IconGateProp         = "AmmoCounterIcon"  -- live Texture2D on AmmoData (scan 2026-07-03); Icon/CategoryClassIcon are SoftObjectProperty = unreadable on this UE4SS build
