@@ -81,6 +81,7 @@ config.ColorMap = {
     { match = "Rune_Water", color = { R = 0.15, G = 0.40, B = 1.00 } }, -- blue
     { match = "Rune_Earth", color = { R = 0.20, G = 0.80, B = 0.20 } }, -- green
     { match = "Rune_Air",   color = { R = 1.00, G = 1.00, B = 0.60 } }, -- pale yellow
+    { match = "Enchanted",  color = { R = 0.65, G = 0.30, B = 0.95 } }, -- arcane purple (before tiers, so Enchanted_Bronze ≠ Bronze)
     { match = "Bronze",     color = { R = 0.80, G = 0.50, B = 0.20 } },
     { match = "Iron",       color = { R = 0.55, G = 0.55, B = 0.60 } },
     { match = "Steel",      color = { R = 0.85, G = 0.85, B = 0.90 } },
