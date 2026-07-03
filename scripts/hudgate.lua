@@ -19,7 +19,18 @@ local UEHelpers = require("UEHelpers")
 local hudgate = {}
 
 -- Flushed file log: the last line before a crash is the diagnosis.
-local LOGFILE = "Mods/SyloreQuickSwap/sqs-hudgate.txt"
+-- Resolve the mod folder from this script's own path (same proven trick as
+-- discovery.lua) — a CWD-relative path would silently land nowhere.
+local function modRoot()
+    local ok, src = pcall(function() return debug.getinfo(1, "S").source end)
+    if ok and type(src) == "string" then
+        local p = src:gsub("^@", "")
+        local dir = p:match("^(.*[/\\])")
+        if dir and dir ~= "" then return (dir:gsub("[Ss]cripts[/\\]$", "")) end
+    end
+    return "./"
+end
+local LOGFILE = modRoot() .. "sqs-hudgate.txt"
 local function flog(msg)
     print("[SQS hudgate] " .. msg)
     local f = io.open(LOGFILE, "a")
