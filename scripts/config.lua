@@ -64,7 +64,7 @@ config.HookKey              = Key.F7   -- arm rune hooks (trace)
 -- MUTUALLY EXCLUSIVE with DiscoveryMode (same keys). Leave OFF for normal play.
 config.HudGateMode          = true   -- ARMED for the one-attempt gate session (disarm after Task 2)
 config.HudGateG1Key         = Key.F7   -- G1: create own widget (red)
-config.HudGateG2Key         = Key.F8   -- G2: size + position it
-config.HudGateG3Key         = Key.F9   -- G3: remove + recreate (blue)
+config.HudGateG2Key         = Key.F9   -- G2: size + position it (PASSED 2026-07-03; F9 eats keypresses on this setup)
+config.HudGateG3Key         = Key.F8   -- G3: remove + recreate (blue) — moved to F8, proven to fire
 
 return config
