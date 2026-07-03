@@ -151,39 +151,70 @@ local function propClassName(prop)
     return ok and c or "?"
 end
 
--- Dump every property name + property class on ItemData's class; for anything
--- icon/brush/texture-ish, also pcall-read the VALUE off ItemData and flog it.
--- Strictly read-only: no writes, no calls other than GetClass/GetFName/ForEachProperty
--- and plain property reads. Never throws (every risky read is individually pcall'd).
+-- Dump every property name + property class on ItemData's class AND its whole
+-- superclass chain (UE4SS ForEachProperty only covers the EXACT class, and the
+-- leaf MagicAmmoData/RangedAmmoData declare no properties of their own — all
+-- inherited; confirmed live 2026-07-03: leaf-only scan dumped ZERO properties).
+-- For anything icon/brush/texture-ish, also pcall-read the VALUE off ItemData
+-- and flog it. Strictly read-only. Never throws (every risky read pcall'd).
+--
+-- CRITICAL walk guard (same hard-won rule as discovery.lua forEachInChain):
+-- past /Script/CoreUObject.Object, GetSuperStruct can return an unresolved
+-- metaclass pointer whose ForEachProperty HARD-CRASHES the game. Detect those
+-- by the absence of a "/Script/" or "/Game/" path in the full name and stop.
+local function looksLikeRealStruct(id)
+    return id ~= "nil"
+        and (string.find(id, "/Script/", 1, true) ~= nil
+          or string.find(id, "/Game/",   1, true) ~= nil)
+end
+
 local function scanIconProperties(data)
     local okCls, cls = pcall(function() return data:GetClass() end)
     if not okCls or cls == nil then
         flog("scan: ItemData:GetClass() failed")
         return
     end
-    local okEach, err = pcall(function()
-        cls:ForEachProperty(function(prop)
-            local okName, pname = pcall(function() return prop:GetFName():ToString() end)
-            if not okName or pname == nil then pname = "?" end
-            local pclass = propClassName(prop)
-            flog(pname .. " : " .. pclass)
+    local hops, seen = 0, {}
+    while cls ~= nil and hops < 12 do
+        local clsId = fullName(cls)
+        if not looksLikeRealStruct(clsId) or seen[clsId] then
+            flog("scan: stopping walk at unresolvable/repeated class: " .. clsId)
+            break
+        end
+        seen[clsId] = true
+        local clsName = "?"
+        pcall(function() clsName = cls:GetFName():ToString() end)
+        flog("scan: -- class " .. clsName .. " --")
+        local okEach, err = pcall(function()
+            cls:ForEachProperty(function(prop)
+                local okName, pname = pcall(function() return prop:GetFName():ToString() end)
+                if not okName or pname == nil then pname = "?" end
+                local pclass = propClassName(prop)
+                flog(pname .. " : " .. pclass)
 
-            if pname ~= "?" and looksIconish(pname) then
-                local okv, v = pcall(function() return data[pname] end)
-                if not okv then
-                    flog("  -> " .. pname .. " value read FAILED: " .. tostring(v))
-                elseif valid(v) then
-                    flog("  -> " .. pname .. " value: " .. fullName(v))
-                elseif v == nil then
-                    flog("  -> " .. pname .. " value: nil")
-                else
-                    local okStr, s = pcall(function() return tostring(v) end)
-                    flog("  -> " .. pname .. " value: " .. (okStr and s or "<unprintable>"))
+                if pname ~= "?" and looksIconish(pname) then
+                    local okv, v = pcall(function() return data[pname] end)
+                    if not okv then
+                        flog("  -> " .. pname .. " value read FAILED: " .. tostring(v))
+                    elseif valid(v) then
+                        flog("  -> " .. pname .. " value: " .. fullName(v))
+                    elseif v == nil then
+                        flog("  -> " .. pname .. " value: nil")
+                    else
+                        local okStr, s = pcall(function() return tostring(v) end)
+                        flog("  -> " .. pname .. " value: " .. (okStr and s or "<unprintable>"))
+                    end
                 end
-            end
+            end)
         end)
-    end)
-    if not okEach then flog("scan: ForEachProperty error: " .. tostring(err)) end
+        if not okEach then flog("scan: ForEachProperty error on " .. clsName .. ": " .. tostring(err)) end
+        -- Root reached? UObject has no real super; anything "above" it is the
+        -- engine metaclass and unsafe to enumerate (see discovery.lua).
+        if string.find(clsId, "/Script/CoreUObject.Object", 1, true) then break end
+        local okSuper, super = pcall(function() return cls:GetSuperStruct() end)
+        cls = (okSuper and super) or nil
+        hops = hops + 1
+    end
 end
 
 -- F7: read-only ItemData icon property scan. Repeatable — press as often as needed.
