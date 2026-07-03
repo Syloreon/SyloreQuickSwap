@@ -88,7 +88,10 @@ SyloreQuickSwap/
     names.lua       Dragonwilds-specific symbols (the only file to touch on a game update)
     swap.lua        ammo cycle (runes / arrows / bolts)
     loadouts.lua    armor loadouts (save / apply sets)
+    hud.lua         loaded-ammo indicator (tinted icon / colored square)
     discovery.lua   optional dev toolbox for re-mapping names (not loaded in normal play)
+    hudgate.lua     optional dev probes for the HUD widget path (not loaded in normal play)
+    icongate.lua    optional dev probes for the icon-texture path (not loaded in normal play)
   enabled.txt
   NAMES.md          reverse-engineering / discovery record
   README.md
