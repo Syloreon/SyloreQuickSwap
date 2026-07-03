@@ -98,6 +98,6 @@ config.DotOffsetY           = 50.0     -- px below screen center (reticle area)
 config.IconGateMode         = true   -- ARMED for the v2 gate session (disarm after Task I2)
 config.IconGateScanKey      = Key.F7
 config.IconGateG4Key        = Key.F8
-config.IconGateProp         = ""
+config.IconGateProp         = "AmmoCounterIcon"  -- live Texture2D on AmmoData (scan 2026-07-03); Icon/CategoryClassIcon are SoftObjectProperty = unreadable on this UE4SS build
 
 return config
