@@ -8,13 +8,16 @@ combat conveniences, so you never have to dig through the inventory mid-fight:
   selection.
 - **Armor loadouts** — save up to four armor sets and re-equip a whole set with a single
   function key.
-- **Loaded-ammo color dot** — a small colored square near the reticle shows which ammo is
-  loaded (fire rune = red, water = blue, poison arrows = green, …). V now auto-skips ammo
-  the game refuses to load (e.g. level-gated runes) and lands on the next loadable one; the
-  dot always reflects the ammo actually loaded, never a failed attempt. Colors, size, and
-  position are configurable via `config.ColorMap`, `config.DotSize`, `config.DotOffsetY`;
-  disable with `config.ShowColorDot = false`. The dot updates on swap and may linger
-  briefly after holstering (by design — no background polling, see the V-crash history).
+- **Loaded-ammo color dot** — shows the loaded ammo's icon (the game's AmmoCounterIcon
+  texture) near the reticle, tinted with its ammo type's color (fire rune = red, water = blue,
+  poison arrows = green, …), and falls back to a plain colored square if the icon texture
+  can't be read. V now auto-skips ammo the game refuses to load (e.g. level-gated runes) and
+  lands on the next loadable one; the indicator always reflects the ammo actually loaded,
+  never a failed attempt. Colors, size, and position are configurable via `config.ColorMap`,
+  `config.DotSize`, `config.DotOffsetY`; disable the icon overlay with `config.ShowIconOverlay = false`
+  to keep the plain square, set icon size in pixels with `config.IconSize`, and toggle the
+  entire indicator with `config.ShowColorDot = false`. The indicator updates on swap and may
+  linger briefly after holstering (by design — no background polling, see the V-crash history).
 
 Built on **UE4SS** (Lua). Single-player tested.
 
@@ -61,7 +64,7 @@ mod folder and reload on startup.
 - **`LoadoutSlotCount`** / **`LoadoutApplyKeys`** — number of loadout slots and their keys.
 - **`LoadoutsFile`** — leave empty to auto-save next to the mod (portable); set a full path to override.
 - **`ShowOnScreenFeedback`** / **`Verbose`** — console feedback and debug logging.
-- **`ShowColorDot`** / **`ColorMap`** / **`ColorDefault`** / **`DotSize`** / **`DotOffsetY`** — toggle the color-dot ammo indicator on/off, customize its color per asset (table mapping asset names to RGB values 0–1), set the fallback color for unmapped ammo, size in pixels, and vertical offset from the reticle center.
+- **`ShowColorDot`** / **`ShowIconOverlay`** / **`ColorMap`** / **`ColorDefault`** / **`DotSize`** / **`IconSize`** / **`DotOffsetY`** — toggle the ammo indicator on/off, show the ammo's icon overlay (set `false` to keep the plain square), customize its color per asset (table mapping asset names to RGB values 0–1), set the fallback color for unmapped ammo, size in pixels for the plain square, size in pixels for the icon, and vertical offset from the reticle center.
 
 ## How it works
 
