@@ -8,6 +8,13 @@ combat conveniences, so you never have to dig through the inventory mid-fight:
   selection.
 - **Armor loadouts** — save up to four armor sets and re-equip a whole set with a single
   function key.
+- **Loaded-ammo color dot** — a small colored square near the reticle shows which ammo is
+  loaded (fire rune = red, water = blue, poison arrows = green, …). V now auto-skips ammo
+  the game refuses to load (e.g. level-gated runes) and lands on the next loadable one; the
+  dot always reflects the ammo actually loaded, never a failed attempt. Colors, size, and
+  position are configurable via `config.ColorMap`, `config.DotSize`, `config.DotOffsetY`;
+  disable with `config.ShowColorDot = false`. The dot updates on swap and may linger
+  briefly after holstering (by design — no background polling, see the V-crash history).
 
 Built on **UE4SS** (Lua). Single-player tested.
 
@@ -54,6 +61,7 @@ mod folder and reload on startup.
 - **`LoadoutSlotCount`** / **`LoadoutApplyKeys`** — number of loadout slots and their keys.
 - **`LoadoutsFile`** — leave empty to auto-save next to the mod (portable); set a full path to override.
 - **`ShowOnScreenFeedback`** / **`Verbose`** — console feedback and debug logging.
+- **`ShowColorDot`** / **`ColorMap`** / **`DotSize`** / **`DotOffsetY`** — toggle the color-dot ammo indicator on/off, customize its color per asset (table mapping asset names to RGB values 0–1), size in pixels, and vertical offset from the reticle center.
 
 ## How it works
 
