@@ -58,3 +58,9 @@ Key content requirements (full code authored at dispatch time, following hudgate
 ## Gate verdicts (appended during execution)
 
 *(empty)*
+
+**2026-07-03 Task I2 verdict: G4 PASS (18:42).**
+- Scan found `AmmoCounterIcon : ObjectProperty` on AmmoData (shared parent of MagicAmmoData/RangedAmmoData) holding a live Texture2D (e.g. T_Icons_Rune_Water) — no soft-ref load needed.
+- `Icon`/`CategoryClassIcon` are SoftObjectProperty = UNREADABLE on this UE4SS build (throws catchable "no registered handler" — safe, but a closed path).
+- G4 clean: property read → valid UObject → createIconDot with `img.Brush.ResourceObject = tex` pre-tint → tint → AddToViewport → viewport sizing. Red-tinted rune icon visible in-game. Both new op classes now gate-proven.
+- ForEachProperty note: leaf classes declare nothing; superclass-chain walk with discovery.lua's metaclass stop-guards is required (commit 3f4dfb0).
