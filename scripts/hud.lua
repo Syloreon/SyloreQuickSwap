@@ -90,7 +90,8 @@ end
 -- logs (if Verbose) and leaves the game untouched — never blocks the swap.
 function hud.setDot(assetName)
     if not config.ShowColorDot then return end
-    local col = colorFor(assetName)
+    local okCol, col = pcall(colorFor, assetName)
+    if not okCol or col == nil then col = config.ColorDefault end
     ExecuteInGameThread(function()
         local ok, err = pcall(function()
             if valid(state.widget) then
