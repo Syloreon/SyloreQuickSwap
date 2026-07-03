@@ -595,3 +595,10 @@ Shape: `hud.setDot(assetName)` keeps the SAME public name/signature (so the swap
 ## Gate verdicts (appended during execution)
 
 *(empty — filled by Task 2 / Task C1)*
+
+**2026-07-03 Task 2 verdict: ALL GATES PASS (Approach A viable).**
+- G1 PASS 15:02 — create UserWidget + UImage root + field-float tint + AddToViewport, all clean.
+- G2 PASS 15:03 — table-arg FVector2D into SetDesiredSize/SetAlignment/SetPositionInViewport is SAFE (June's crash was native-widget mutation, not marshalling).
+- G3 PASS 15:09 — RemoveFromParent on own widget + full recreate (blue) + re-size/position, all clean. User confirmed small blue square on screen.
+- Environment notes: F9 keypresses never reach the mod on this setup (G3 moved to F8); UE4SS Ctrl+R hot-reload does not work — config changes need a full game restart; hudgate log path must be script-relative (fixed, commit 0074784).
+- Live ammo asset names observed: Ammo_Bolts_Bronze/Iron, Ammo_Bolts_Enchanted_Bronze/Iron, Ammo_Arrows_Bronze_Bodkin, Ammo_Arrows_Bronze_Poison (prefix-stripped forms).
