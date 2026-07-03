@@ -8,7 +8,7 @@ combat conveniences, so you never have to dig through the inventory mid-fight:
   selection.
 - **Armor loadouts** — save up to four armor sets and re-equip a whole set with a single
   function key.
-- **Loaded-ammo color dot** — shows the loaded ammo's icon (the game's AmmoCounterIcon
+- **Loaded-ammo indicator** — shows the loaded ammo's icon (the game's AmmoCounterIcon
   texture) near the reticle, tinted with its ammo type's color (fire rune = red, water = blue,
   poison arrows = green, …), and falls back to a plain colored square if the icon texture
   can't be read. V now auto-skips ammo the game refuses to load (e.g. level-gated runes) and

@@ -84,8 +84,9 @@ local function createDot(col, tex)
 
     local usedIcon = false
     if tex ~= nil and valid(tex) then
-        img.Brush.ResourceObject = tex   -- G4-proven on OWN image, pre-viewport
-        usedIcon = true
+        -- G4-proven on OWN image, pre-viewport; individually pcall'd so a bad
+        -- texture degrades to the plain square instead of suppressing the dot.
+        usedIcon = pcall(function() img.Brush.ResourceObject = tex end)
     end
 
     setColorFields(img, col)
