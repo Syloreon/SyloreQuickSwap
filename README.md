@@ -61,7 +61,7 @@ mod folder and reload on startup.
 - **`LoadoutSlotCount`** / **`LoadoutApplyKeys`** — number of loadout slots and their keys.
 - **`LoadoutsFile`** — leave empty to auto-save next to the mod (portable); set a full path to override.
 - **`ShowOnScreenFeedback`** / **`Verbose`** — console feedback and debug logging.
-- **`ShowColorDot`** / **`ColorMap`** / **`DotSize`** / **`DotOffsetY`** — toggle the color-dot ammo indicator on/off, customize its color per asset (table mapping asset names to RGB values 0–1), size in pixels, and vertical offset from the reticle center.
+- **`ShowColorDot`** / **`ColorMap`** / **`ColorDefault`** / **`DotSize`** / **`DotOffsetY`** — toggle the color-dot ammo indicator on/off, customize its color per asset (table mapping asset names to RGB values 0–1), set the fallback color for unmapped ammo, size in pixels, and vertical offset from the reticle center.
 
 ## How it works
 

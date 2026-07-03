@@ -73,7 +73,7 @@ config.HudGateG3Key         = Key.F8   -- G3: remove + recreate (blue) — moved
 -- mutated — see docs/superpowers/specs/2026-07-03-ammo-color-dot-design.md).
 -- Known v1 wart: the dot lingers after holstering until your next swap.
 config.ShowColorDot         = true
--- First matching substring (case-insensitive, checked in order) wins.
+-- First matching substring (case-insensitive, checked in order) wins. Poison is intentionally listed BEFORE tier names so poison ammo stays green — don't re-sort alphabetically.
 -- Keys match the ItemData asset name, e.g. "ITEM_Rune_Fire", "ITEM_Arrow_Poison".
 config.ColorMap = {
     { match = "Poison",     color = { R = 0.20, G = 0.90, B = 0.20 } }, -- green

@@ -5,7 +5,10 @@
     beyond the ops proven safe by gates G1-G3, see hudgate.lua / the 2026-07-03
     plan). Native game widgets are never touched — that path hard-crashes.
 
-    Public surface: hud.setDot(assetName) — best-effort, never throws.
+    Public surface:
+      hud.applyDot(assetName) — replace the dot NOW; caller MUST already be on the game thread (this is what swap.lua calls from inside its load closure).
+      hud.setDot(assetName)   — same, safe from any thread (queues onto the game thread).
+    Both are best-effort and never throw.
 
     Author: Syloreon Khan <sylore@hotmail.com>
 ]]
@@ -77,6 +80,7 @@ local function createDot(col)
     w.WidgetTree.RootWidget = img
     setColorFields(img, col)
     w:AddToViewport(100)
+    state.widget = w   -- track the instant it's on the viewport, so a later throw can't orphan it
 
     local size = config.DotSize or 16.0
     local px, py = dotPosition(pc)
