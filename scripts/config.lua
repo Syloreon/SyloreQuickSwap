@@ -62,9 +62,33 @@ config.HookKey              = Key.F7   -- arm rune hooks (trace)
 -- ── HUD color-dot gate (TEMPORARY — one-attempt probe, see plans/2026-07-03) ──
 -- When true, main.lua loads hudgate.lua and binds F7/F8/F9 to gates G1/G2/G3.
 -- MUTUALLY EXCLUSIVE with DiscoveryMode (same keys). Leave OFF for normal play.
-config.HudGateMode          = true   -- ARMED for the one-attempt gate session (disarm after Task 2)
+config.HudGateMode          = false
 config.HudGateG1Key         = Key.F7   -- G1: create own widget (red)
 config.HudGateG2Key         = Key.F9   -- G2: size + position it (PASSED 2026-07-03; F9 eats keypresses on this setup)
 config.HudGateG3Key         = Key.F8   -- G3: remove + recreate (blue) — moved to F8, proven to fire
+
+-- ── Loaded-ammo color dot ─────────────────────────────────────────────────
+-- A small square of color near the reticle showing the loaded ammo type.
+-- Recolored on every V swap (the dot is destroyed and recreated — never
+-- mutated — see docs/superpowers/specs/2026-07-03-ammo-color-dot-design.md).
+-- Known v1 wart: the dot lingers after holstering until your next swap.
+config.ShowColorDot         = true
+-- First matching substring (case-insensitive, checked in order) wins.
+-- Keys match the ItemData asset name, e.g. "ITEM_Rune_Fire", "ITEM_Arrow_Poison".
+config.ColorMap = {
+    { match = "Poison",     color = { R = 0.20, G = 0.90, B = 0.20 } }, -- green
+    { match = "Rune_Fire",  color = { R = 1.00, G = 0.15, B = 0.10 } }, -- red
+    { match = "Rune_Water", color = { R = 0.15, G = 0.40, B = 1.00 } }, -- blue
+    { match = "Rune_Earth", color = { R = 0.20, G = 0.80, B = 0.20 } }, -- green
+    { match = "Rune_Air",   color = { R = 1.00, G = 1.00, B = 0.60 } }, -- pale yellow
+    { match = "Bronze",     color = { R = 0.80, G = 0.50, B = 0.20 } },
+    { match = "Iron",       color = { R = 0.55, G = 0.55, B = 0.60 } },
+    { match = "Steel",      color = { R = 0.85, G = 0.85, B = 0.90 } },
+    { match = "Mithril",    color = { R = 0.35, G = 0.45, B = 1.00 } },
+    { match = "Adamant",    color = { R = 0.10, G = 0.60, B = 0.35 } },
+}
+config.ColorDefault         = { R = 1.0, G = 1.0, B = 1.0 }  -- unmapped ammo
+config.DotSize              = 16.0     -- square edge, px
+config.DotOffsetY           = 50.0     -- px below screen center (reticle area)
 
 return config

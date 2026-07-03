@@ -25,6 +25,7 @@
 local UEHelpers = require("UEHelpers")
 local names     = require("names")
 local config    = require("config")
+local hud       = require("hud")
 
 local swap = {}
 
@@ -282,6 +283,9 @@ function swap.cycle(direction)
             print("[Sylore Quick Swap] load failed: " .. tostring(err))
         end
     end)
+
+    -- Color-dot feedback (own-widget HUD; best-effort, never blocks the swap).
+    hud.setDot(target.asset)
 
     log(strat.label .. ": " .. pretty(currentAsset) .. " -> " .. pretty(target.asset)
         .. " (slot " .. target.slot .. ")")
