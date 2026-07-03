@@ -12,3 +12,4 @@ HANDOFF.md
 *.tmp
 Thumbs.db
 .DS_Store
+sqs-hudgate.txt
