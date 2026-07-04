@@ -45,7 +45,7 @@ config.RuneOrder           = {}   -- legacy alias; AmmoOrder takes precedence if
 
 -- ── Feedback / debugging ──────────────────────────────────────────────────
 config.ShowOnScreenFeedback = true   -- brief on-screen note of the new ammo (if supported)
-config.Verbose              = false  -- log details to the UE4SS console
+config.Verbose              = true   -- log details to the UE4SS console (ON for the dedicated-server crash hunt)
 
 -- ── Phase 1 discovery (TEMPORARY — kept for future re-mapping) ────────────
 -- When true, main.lua loads discovery.lua and binds:
@@ -72,7 +72,7 @@ config.HudGateG3Key         = Key.F8   -- G3: remove + recreate (blue) — moved
 -- Recolored on every V swap (the dot is destroyed and recreated — never
 -- mutated — see docs/superpowers/specs/2026-07-03-ammo-color-dot-design.md).
 -- Known v1 wart: the dot lingers after holstering until your next swap.
-config.ShowColorDot         = true
+config.ShowColorDot         = false  -- TEMP OFF: crash-isolation test on the dedicated server (restore true after)
 -- First matching substring (case-insensitive, checked in order) wins. Poison is intentionally listed BEFORE tier names so poison ammo stays green — don't re-sort alphabetically.
 -- Keys match the ItemData asset name, e.g. "ITEM_Rune_Fire", "ITEM_Arrow_Poison".
 config.ColorMap = {

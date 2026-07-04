@@ -315,7 +315,9 @@ function swap.cycle(direction)
                     .. pretty(currentAsset) .. ").")
             end
             local shown = landed or currentAsset
-            if shown then
+            -- ShowColorDot=false must disable ALL HUD work, including the
+            -- ItemData icon read — it doubles as the crash-isolation switch.
+            if shown and config.ShowColorDot then
                 -- Icon from the VERIFIED slot item (nil -> hud falls back to the square).
                 local iconTex = nil
                 pcall(function()
