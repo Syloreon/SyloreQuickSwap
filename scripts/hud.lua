@@ -101,13 +101,34 @@ local function createDot(col, tex)
     return w
 end
 
+-- True when the current world is networked (dedicated server client, co-op,
+-- etc.). Replicated worlds can hand us icon textures the renderer can't
+-- safely draw — drawing one hard-crashed a dedicated-server client on
+-- 2026-07-03 (and showed garbage icons on another machine). So the icon
+-- overlay is single-player only; networked worlds always get the square.
+-- Fails SAFE: if we can't tell, we assume networked (cosmetic loss only).
+local function worldIsNetworked()
+    local ok, networked = pcall(function()
+        local world = UEHelpers:GetWorld()
+        if world == nil or not world:IsValid() then return true end
+        local nd = world.NetDriver
+        return nd ~= nil and nd.IsValid ~= nil and nd:IsValid()
+    end)
+    if not ok then return true end
+    return networked
+end
+
 -- Public: replace the dot NOW — caller must ALREADY be on the game thread
 -- (swap's load closure calls this). Best-effort: fully pcall'd, never throws.
 -- iconTex is optional (nil -> plain color square, forwarded only when
--- config.ShowIconOverlay is true).
+-- config.ShowIconOverlay is true AND the world is single-player).
 function hud.applyDot(assetName, iconTex)
     if not config.ShowColorDot then return end
     if not config.ShowIconOverlay then iconTex = nil end
+    if iconTex ~= nil and worldIsNetworked() then
+        log("networked world — icon overlay suppressed (square fallback)")
+        iconTex = nil
+    end
     local okCol, col = pcall(colorFor, assetName)
     if not okCol or col == nil then col = config.ColorDefault end
     local ok, err = pcall(function()
