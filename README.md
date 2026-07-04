@@ -10,8 +10,10 @@ combat conveniences, so you never have to dig through the inventory mid-fight:
   function key.
 - **Loaded-ammo indicator** — shows the loaded ammo's icon (the game's AmmoCounterIcon
   texture) near the reticle, tinted with its ammo type's color (fire rune = red, water = blue,
-  poison arrows = green, …), and falls back to a plain colored square if the icon texture
-  can't be read. V now auto-skips ammo the game refuses to load (e.g. level-gated runes) and
+  poison arrows = green, …). Icons render in single-player; in networked worlds (co-op /
+  dedicated servers) the indicator automatically uses a plain colored square instead —
+  drawing replicated-world icon textures is unstable client-side. The square also appears
+  any time an icon texture can't be read. V now auto-skips ammo the game refuses to load (e.g. level-gated runes) and
   lands on the next loadable one; the indicator always reflects the ammo actually loaded,
   never a failed attempt. Colors, size, and position are configurable via `config.ColorMap`,
   `config.DotSize`, `config.DotOffsetY`; disable the icon overlay with `config.ShowIconOverlay = false`
@@ -99,7 +101,8 @@ SyloreQuickSwap/
 
 ## Compatibility & maintenance
 
-- Single-player tested. Dedicated-server use is out of scope.
+- Single-player and dedicated-server clients tested (ammo swap, loadouts, and the square
+  indicator work in both; icon overlay is single-player only, by design — see above).
 - Early Access updates may rename internal classes/functions. If something stops working, all
   Dragonwilds-specific names live in `scripts/names.lua` — fix them there (set
   `config.DiscoveryMode = true` and use `scripts/discovery.lua` to re-probe; see `NAMES.md`).
