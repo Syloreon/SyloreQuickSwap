@@ -21,8 +21,9 @@ combat conveniences, so you never have to dig through the inventory mid-fight:
   entire indicator with `config.ShowColorDot = false`. The indicator updates on swap and may
   linger briefly after holstering (by design — no background polling, see the V-crash history).
 
-Built on **UE4SS** (Lua). Single-player tested.
+Built on **UE4SS** (Lua).
 
+- **Download:** [Nexus Mods](https://www.nexusmods.com/runescapedragonwilds/mods/389) (source lives here on GitHub)
 - **Author:** Syloreon Khan <sylore@hotmail.com>
 
 ## Controls (defaults — edit in `scripts/config.lua`)
