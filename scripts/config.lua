@@ -72,7 +72,7 @@ config.HudGateG3Key         = Key.F8   -- G3: remove + recreate (blue) — moved
 -- Recolored on every V swap (the dot is destroyed and recreated — never
 -- mutated — see docs/superpowers/specs/2026-07-03-ammo-color-dot-design.md).
 -- Known v1 wart: the dot lingers after holstering until your next swap.
-config.ShowColorDot         = false  -- TEMP OFF: crash-isolation test on the dedicated server (restore true after)
+config.ShowColorDot         = true   -- test round 2: square indicator ON, icon overlay OFF
 -- First matching substring (case-insensitive, checked in order) wins. Poison is intentionally listed BEFORE tier names so poison ammo stays green — don't re-sort alphabetically.
 -- Keys match the ItemData asset name, e.g. "ITEM_Rune_Fire", "ITEM_Arrow_Poison".
 config.ColorMap = {
@@ -95,7 +95,7 @@ config.DotOffsetY           = 50.0     -- px below screen center (reticle area)
 -- Icon overlay (v2): draw the ammo's own icon (AmmoCounterIcon texture),
 -- tinted with its ColorMap color, instead of a plain square. Falls back to
 -- the square automatically whenever the texture can't be read.
-config.ShowIconOverlay      = true
+config.ShowIconOverlay      = false  -- test round 2: square only (isolate widget ops from the icon texture)
 config.IconSize             = 32.0    -- icon edge, px (square uses DotSize)
 
 -- ── Icon-overlay gate (TEMPORARY — v2 one-shot probe, see plans/2026-07-03-ammo-icon-overlay) ──
